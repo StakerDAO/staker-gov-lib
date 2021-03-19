@@ -46,7 +46,23 @@ export default class HttpTezosClient implements TezosClient {
       baseURL: this.nodeUrl,
     })
     const endpoint = `chains/main/blocks/${blockNumber.toFixed()}/context/big_maps/${this.mapId}/${packedKey}`
-    const response = await axiosAPI.get(endpoint)
-    return new BigNumber(response.data.int)
+
+    // by default, if the key hash isn't found (404 error), return 0 as balance
+    let response = null
+    let returnResponse = 0
+    try
+    {
+      const response = await axiosAPI.get(endpoint)
+      returnResponse = response.data.int
+    }
+    catch (e)
+    {
+      if (e.response.status !== 404)
+      {
+        // the error is not a 404, so potential timeout/transport error, rethrow
+        throw e
+      }
+    }
+    return new BigNumber(returnResponse)
   }
 }

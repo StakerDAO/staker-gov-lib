@@ -27,8 +27,18 @@ class HttpTezosClient {
             baseURL: this.nodeUrl,
         });
         const endpoint = `chains/main/blocks/${blockNumber.toFixed()}/context/big_maps/${this.mapId}/${packedKey}`;
-        const response = await axiosAPI.get(endpoint);
-        return new bignumber_js_1.default(response.data.int);
+        let response = null;
+        let returnResponse = 0;
+        try {
+            const response = await axiosAPI.get(endpoint);
+            returnResponse = response.data.int;
+        }
+        catch (e) {
+            if (e.response.status !== 404) {
+                throw e;
+            }
+        }
+        return new bignumber_js_1.default(returnResponse);
     }
 }
 exports.default = HttpTezosClient;
