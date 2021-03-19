@@ -31,7 +31,7 @@ export default class HttpTezosClient implements TezosClient {
     })
     const endpoint = `chains/main/blocks/head`
     const { data } = await axiosAPI.get(endpoint)
-    return data.header.level
+    return new BigNumber(data.header.level)
   }
 
   public async getBalance(
@@ -47,6 +47,6 @@ export default class HttpTezosClient implements TezosClient {
     })
     const endpoint = `chains/main/blocks/${blockNumber.toFixed()}/context/big_maps/${this.mapId}/${packedKey}`
     const response = await axiosAPI.get(endpoint)
-    return response.data.int
+    return new BigNumber(response.data.int)
   }
 }
