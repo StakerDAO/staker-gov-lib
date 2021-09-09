@@ -31,7 +31,7 @@ export default class HttpTezosClient implements TezosClient {
     })
     const endpoint = `chains/main/blocks/head`
     const { data } = await axiosAPI.get(endpoint)
-    return new BigNumber(data.header.level)
+    return Promise.resolve(new BigNumber(data.header.level))
   }
 
   public async getBalance(
@@ -63,6 +63,6 @@ export default class HttpTezosClient implements TezosClient {
         throw e
       }
     }
-    return new BigNumber(returnResponse)
+    return Promise.resolve(new BigNumber(returnResponse))
   }
 }

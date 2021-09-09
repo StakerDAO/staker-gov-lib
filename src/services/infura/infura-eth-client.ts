@@ -28,7 +28,7 @@ export default class InfuraEthClient implements EthClient {
 
   public async getMostRecentBlock(): Promise<BigNumber> {
     const latestBlock = await this.web3.eth.getBlock('latest')
-    return new BigNumber(latestBlock.number)
+    return Promise.resolve(new BigNumber(latestBlock.number))
   }
 
   public async getBalance(address: string, blockNumber: BigNumber): Promise<BigNumber> {
